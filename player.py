@@ -31,6 +31,15 @@ class Player(pygame.sprite.Sprite):
         self.moving_floor = None
 
         self.shoot_bullet = shoot_bullet
+        self.can_shoot = True
+        self.shoot_time = None
+        self.cooldown = 150
+    
+    def shoot_timer(self):
+        if not self.can_shoot:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.shoot_time > self.cooldown:
+                self.can_shoot = True
     
     def set_status(self):
         #idle
@@ -92,8 +101,14 @@ class Player(pygame.sprite.Sprite):
         else:
             self.duck = False
 
-        if keys[pygame.K_SPACE]:
-            self.shoot_bullet
+        if keys[pygame.K_SPACE] and self.can_shoot:
+            direction = Vector2(1, 0) if self.status.split('_')[0] == 'right' else Vector2(-1, 0)
+            pos = self.rect.center + direction * 55
+            y_offset = Vector2(0, 10) if self.duck else Vector2(0, -15)
+            self.shoot_bullet(pos + y_offset, direction, self)
+            
+            self.can_shoot = False
+            self.shoot_time = pygame.time.get_ticks()
 
     def collision(self, direction):
         for sprite in self.collision_sprites.sprites():
@@ -147,3 +162,5 @@ class Player(pygame.sprite.Sprite):
         self.move(dt)
         self.check_contact()
         self.animation(dt)
+
+        self.shoot_timer()
