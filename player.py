@@ -4,7 +4,7 @@ from pygame.math import Vector2
 from os import walk
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, path, collision_sprites):
+    def __init__(self, pos, groups, path, collision_sprites, shoot_bullet):
         super().__init__(groups)
         self.import_asset(path)
         self.frame_index = 0
@@ -28,6 +28,9 @@ class Player(pygame.sprite.Sprite):
         self.jump_speed = 1200
         self.on_floor = False
         self.duck = False
+        self.moving_floor = None
+
+        self.shoot_bullet = shoot_bullet
     
     def set_status(self):
         #idle
@@ -47,6 +50,8 @@ class Player(pygame.sprite.Sprite):
             if sprite.rect.colliderect(bottom_rect):
                 if self.direction.y > 0:
                     self.on_floor = True
+                if hasattr(sprite, 'direction'):
+                    self.moving_floor = sprite
     
     def import_asset(self, path):
         self.animations = {}
@@ -87,6 +92,9 @@ class Player(pygame.sprite.Sprite):
         else:
             self.duck = False
 
+        if keys[pygame.K_SPACE]:
+            self.shoot_bullet
+
     def collision(self, direction):
         for sprite in self.collision_sprites.sprites():
             if sprite.rect.colliderect(self.rect):
@@ -113,7 +121,7 @@ class Player(pygame.sprite.Sprite):
   
     def move(self, dt):
         if self.duck and self.direction:
-            self.direction.x = 0
+            self.direction.x = 0  
 
         self.pos.x += self.direction.x * self.speed * dt
         self.rect.x = round(self.pos.x)
@@ -121,8 +129,16 @@ class Player(pygame.sprite.Sprite):
 
         self.direction.y += self.gravity
         self.pos.y += self.direction.y * dt
+
+        if self.moving_floor and self.moving_floor.direction.y > 0 and self.direction.y > 0:
+             self.direction.y = 0
+             self.rect.bottom = self.moving_floor.rect.top
+             self.pos.y = self.rect.y
+             self.on_floor = True
+
         self.rect.y = round(self.pos.y)
         self.collision('vertical')
+        self.moving_floor = None
 
     def update(self, dt):
         self.old_rect = self.rect.copy()

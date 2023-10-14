@@ -3,6 +3,7 @@ from setting import *
 from pytmx.util_pygame import load_pygame
 from pygame.math import Vector2
 from tiled import Tile, CollisionTile, Movingobj
+from bullet import Bullet
 from player import Player
 
 class AllSprites(pygame.sprite.Group):
@@ -31,8 +32,11 @@ class Main:
         self.all_sprites = AllSprites()
         self.collision_sprites = pygame.sprite.Group()
         self.platform_sprites = pygame.sprite.Group()
+        self.bullet_sprite = pygame.sprite.Group()
 
         self.setup()
+        
+        self.bullet_surf = pygame.image.load('./graphics/bullet.png').convert_alpha()
     
     def setup(self):
         tmx_map = load_pygame('./data/map.tmx')
@@ -49,7 +53,11 @@ class Main:
         # objects
         for obj in tmx_map.get_layer_by_name('Entities'):
             if obj.name == 'Player':
-                self.player = Player((obj.x, obj.y), self.all_sprites, './graphics/player', self.collision_sprites)
+                self.player = Player((obj.x, obj.y), 
+                                     self.all_sprites, 
+                                     './graphics/player', 
+                                     self.collision_sprites,
+                                     self.shoot_bullet)
         self.platform_border_rect = []
         for obj in tmx_map.get_layer_by_name('Platforms'):
             if obj.name == 'Platform':
@@ -70,6 +78,13 @@ class Main:
                         platform.rect.bottom = border.top
                         platform.pos.y = platform.rect.y
                         platform.direction.y = -1
+            if platform.rect.colliderect(self.player.rect) and self.player.rect.centery > platform.rect.centery:
+                platform.rect.bottom = self.player.rect.top
+                platform.pos.y = platform.rect.y
+                platform.direction.y = -1
+    
+    def shoot_bullet(self, pos, direction, entity):
+        Bullet(pos, self.bullet_surf, direction, self.all_sprites, self.bullet_sprite)
     
     def run(self):
         while True:
@@ -81,7 +96,7 @@ class Main:
             dt = self.clock.tick() / 1000
             self.display_surface.fill((249, 131, 103))
 
-            self.platform_collision
+            self.platform_collision()
             self.all_sprites.update(dt)
             #self.all_sprites.draw(self.display_surface)
             self.all_sprites.custom_draw(self.player)
