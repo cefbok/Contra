@@ -2,7 +2,7 @@ import pygame, sys
 from setting import *
 from pytmx.util_pygame import load_pygame
 from pygame.math import Vector2
-from tiled import Tile, CollisionTile
+from tiled import Tile, CollisionTile, Movingobj
 from player import Player
 
 class AllSprites(pygame.sprite.Group):
@@ -30,6 +30,7 @@ class Main:
         #groups
         self.all_sprites = AllSprites()
         self.collision_sprites = pygame.sprite.Group()
+        self.platform_sprites = pygame.sprite.Group()
 
         self.setup()
     
@@ -49,7 +50,26 @@ class Main:
         for obj in tmx_map.get_layer_by_name('Entities'):
             if obj.name == 'Player':
                 self.player = Player((obj.x, obj.y), self.all_sprites, './graphics/player', self.collision_sprites)
-            
+        self.platform_border_rect = []
+        for obj in tmx_map.get_layer_by_name('Platforms'):
+            if obj.name == 'Platform':
+                Movingobj((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites, self.platform_sprites]) 
+            else: # border
+                border_rect = pygame.Rect(obj.x , obj.y, obj.width, obj.height)
+                self.platform_border_rect.append(border_rect)
+
+    def platform_collision(self):
+        for platform in self.platform_sprites.sprites():
+            for border in self.platform_border_rect:
+                if platform.rect.colliderect(border):
+                    if platform.direction.y < 0:
+                        platform.rect.top = border.bottom
+                        platform.pos.y = platform.rect.y
+                        platform.direction.y = 1
+                    else:
+                        platform.rect.bottom = border.top
+                        platform.pos.y = platform.rect.y
+                        platform.direction.y = -1
     
     def run(self):
         while True:
@@ -61,6 +81,7 @@ class Main:
             dt = self.clock.tick() / 1000
             self.display_surface.fill((249, 131, 103))
 
+            self.platform_collision
             self.all_sprites.update(dt)
             #self.all_sprites.draw(self.display_surface)
             self.all_sprites.custom_draw(self.player)
