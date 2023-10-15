@@ -284,58 +284,58 @@
   <object id="15" name="Player" x="482" y="2146">
    <point/>
   </object>
-  <object id="18" name="Enemy" x="1392" y="2180">
+  <object id="18" name="Enemy" x="1336" y="2206.67">
    <point/>
   </object>
-  <object id="19" name="Enemy" x="2400.67" y="2332">
+  <object id="19" name="Enemy" x="2355.34" y="2341.33">
    <point/>
   </object>
-  <object id="20" name="Enemy" x="2932" y="2328">
+  <object id="20" name="Enemy" x="2848" y="2328">
    <point/>
   </object>
-  <object id="21" name="Enemy" x="3580" y="2500">
+  <object id="21" name="Enemy" x="3540" y="2553.33">
    <point/>
   </object>
-  <object id="22" name="Enemy" x="4284.67" y="2422">
+  <object id="22" name="Enemy" x="4268.67" y="2411.33">
    <point/>
   </object>
-  <object id="23" name="Enemy" x="4521.33" y="1945.33">
+  <object id="23" name="Enemy" x="4518.66" y="1980">
    <point/>
   </object>
-  <object id="24" name="Enemy" x="4320" y="1344">
+  <object id="24" name="Enemy" x="4370.67" y="1378.67">
    <point/>
   </object>
-  <object id="27" name="Enemy" x="3236" y="1116">
+  <object id="27" name="Enemy" x="3241.33" y="1144">
    <point/>
   </object>
-  <object id="29" name="Enemy" x="2396" y="968">
+  <object id="29" name="Enemy" x="2428" y="1016">
    <point/>
   </object>
-  <object id="30" name="Enemy" x="1840" y="988">
+  <object id="30" name="Enemy" x="1850.67" y="1021.33">
    <point/>
   </object>
-  <object id="31" name="Enemy" x="1776" y="1304">
+  <object id="31" name="Enemy" x="1788" y="1332">
    <point/>
   </object>
-  <object id="32" name="Enemy" x="976" y="1516">
+  <object id="32" name="Enemy" x="978.667" y="1526.67">
    <point/>
   </object>
-  <object id="33" name="Enemy" x="1104" y="916">
+  <object id="33" name="Enemy" x="1081.33" y="965.333">
    <point/>
   </object>
-  <object id="34" name="Enemy" x="1998.67" y="2096">
+  <object id="34" name="Enemy" x="1917.34" y="2088">
    <point/>
   </object>
-  <object id="35" name="Enemy" x="2708" y="1804">
+  <object id="35" name="Enemy" x="2700" y="1838.67">
    <point/>
   </object>
-  <object id="36" name="Enemy" x="3268" y="1668">
+  <object id="36" name="Enemy" x="3242.67" y="1721.33">
    <point/>
   </object>
-  <object id="38" name="Enemy" x="2104" y="2440">
+  <object id="38" name="Enemy" x="2074.67" y="2478.67">
    <point/>
   </object>
-  <object id="40" name="Enemy" x="4576" y="664">
+  <object id="40" name="Enemy" x="4546.67" y="692">
    <point/>
   </object>
  </objectgroup>
