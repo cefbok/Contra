@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 from setting import *
 from pygame.math import Vector2
 from entity import Entity
@@ -15,6 +15,8 @@ class Player(Entity):
         self.jump_speed = 1200
         self.on_floor = False
         self.moving_floor = None
+        
+        self.health = 20
     
     def set_status(self):
         #idle
@@ -58,12 +60,13 @@ class Player(Entity):
 
         if keys[pygame.K_SPACE] and self.can_shoot:
             direction = Vector2(1, 0) if self.status.split('_')[0] == 'right' else Vector2(-1, 0)
-            pos = self.rect.center + direction * 55
+            pos = self.rect.center + direction * 60
             y_offset = Vector2(0, 10) if self.duck else Vector2(0, -15)
             self.shoot_bullet(pos + y_offset, direction, self)
             
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
+            self.shot_sound.play()
 
     def collision(self, direction):
         for sprite in self.collision_sprites.sprites():
@@ -110,6 +113,11 @@ class Player(Entity):
         self.collision('vertical')
         self.moving_floor = None
 
+    def check_death(self):
+        if self.health <= 0:
+            pygame.quit()
+            sys.exit()
+
     def update(self, dt):
         self.old_rect = self.rect.copy()
         self.input()
@@ -117,5 +125,9 @@ class Player(Entity):
         self.move(dt)
         self.check_contact()
         self.animation(dt)
+        self.blink()
 
         self.shoot_timer()
+        self.invul_timer()
+
+        self.check_death()

@@ -29,16 +29,22 @@ class Enemy(Entity):
 
         if distance < 600 and same_y and self.can_shoot:
             bullet_direct = Vector2(1, 0) if self.status == 'right' else Vector2(-1, 0)
-            y_offest = Vector2(0, -15)
-            pos = self.rect.center + bullet_direct * 40
+            y_offest = Vector2(0, -16)
+            pos = self.rect.center + bullet_direct * 80
             self.shoot_bullet(pos + y_offest, bullet_direct, self)
 
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
+            
+            self.shot_sound.play()
 
     def update(self, dt):
         self.get_status()
         self.animation(dt)
+        self.blink()
 
         self.shoot_timer()
+        self.invul_timer()
         self.check_fire()
+    
+        self.check_death()
